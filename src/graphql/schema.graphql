@@ -1,0 +1,54 @@
+scalar BigInt
+
+enum TokenType {
+  FEE
+  STANDARD
+}
+
+type Tokens {
+  id: ID!
+  token: String!
+  name: String!
+  symbol: String!
+  totalSupply: BigInt!
+  decimalPlaces: BigInt!
+  owner: String!
+  tokenType: TokenType!
+  createdAt: BigInt!
+  fee: BigInt
+  transferTax: BigInt
+}
+
+type PlatformStats {
+  id: ID!
+  totalTokens: BigInt!
+  totalTokenLockers: BigInt!
+  totalLPLockers: BigInt!
+  totalSales: BigInt!
+}
+
+type Query {
+  PlatformStats: PlatformStats
+  Tokens(
+    where: TokensWhereInput
+    order_by: TokensOrderByInput
+    limit: Int
+  ): [Tokens!]!
+}
+
+input TokensWhereInput {
+  owner: StringWhereInput
+}
+
+input StringWhereInput {
+  _eq: String
+}
+
+input TokensOrderByInput {
+  createdAt: OrderDirection
+}
+
+enum OrderDirection {
+  asc
+  desc
+}

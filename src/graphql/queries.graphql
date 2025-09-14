@@ -1,0 +1,40 @@
+query GetPlatformStats {
+  PlatformStats {
+    totalTokens
+    totalTokenLockers
+    totalLPLockers
+    totalSales
+  }
+}
+
+query GetRecentTokens {
+  Tokens(order_by: { createdAt: desc }, limit: 3) {
+    id
+    token
+    name
+    symbol
+    totalSupply
+    decimalPlaces
+    owner
+    tokenType
+    createdAt
+    fee
+    transferTax
+  }
+}
+
+query GetUserTokens($owner: String!) {
+  Tokens(where: { owner: { _eq: $owner } }) {
+    id
+    token
+    name
+    symbol
+    totalSupply
+    decimalPlaces
+    owner
+    tokenType
+    createdAt
+    fee
+    transferTax
+  }
+}
