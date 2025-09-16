@@ -9,9 +9,10 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
-import { Coins } from "lucide-react";
+import { Coins, Loader2 } from "lucide-react";
 import { useState } from "react";
 import { useTokenFactory } from "@/hooks/useTokenFactory";
+import { useMutation } from "@tanstack/react-query";
 
 const TokenFactoryCard = () => {
   const [tokenType] = useState<
@@ -41,6 +42,29 @@ const TokenFactoryCard = () => {
     );
     console.log(tokenAddress);
   };
+
+  const handleReset = () => {
+    setTokenData({
+      tokenName: "",
+      tokenSymbol: "",
+      totalSupply: 0,
+      decimals: 18,
+    });
+  };
+
+  const { mutate: createToken, isPending: isCreatingToken } = useMutation({
+    mutationFn: handleCreateTokens,
+    onSuccess: () => {
+      handleReset();
+    },
+  });
+
+  const isDisabled =
+    !tokenData.tokenName ||
+    !tokenData.tokenSymbol ||
+    !tokenData.totalSupply ||
+    !tokenData.decimals ||
+    isCreatingToken;
 
   return (
     <Card className="glass-card hover-glow">
@@ -164,10 +188,20 @@ const TokenFactoryCard = () => {
           variant="gradient"
           className="w-full"
           size="lg"
-          onClick={handleCreateTokens}
+          onClick={() => createToken()}
+          disabled={isDisabled}
         >
-          <Coins className="w-5 h-5 mr-2" />
-          Deploy Token
+          {isCreatingToken ? (
+            <>
+              <Loader2 className="w-5 h-5 mr-2 animate-spin" />
+              Creating...
+            </>
+          ) : (
+            <>
+              <Coins className="w-5 h-5 mr-2" />
+              Deploy Token
+            </>
+          )}
         </Button>
       </CardContent>
     </Card>

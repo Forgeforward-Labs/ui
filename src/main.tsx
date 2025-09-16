@@ -6,6 +6,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { WagmiProvider } from "wagmi";
 import { config } from "./lib/wagmi.ts";
 import { BrowserRouter } from "react-router-dom";
+import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
 
 // import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -13,16 +14,23 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 
 const queryClient = new QueryClient();
 
+const client = new ApolloClient({
+  uri: "http://localhost:8080/v1/graphql",
+  cache: new InMemoryCache(),
+});
+
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <WagmiProvider config={config}>
       <QueryClientProvider client={queryClient}>
-        {/* <RainbowKitProvider> */}
-        <BrowserRouter>
-          {/* <Toaster /> */}
-          <Sonner />
-          <App />
-        </BrowserRouter>
+        <ApolloProvider client={client}>
+          {/* <RainbowKitProvider> */}
+          <BrowserRouter>
+            {/* <Toaster /> */}
+            <Sonner />
+            <App />
+          </BrowserRouter>
+        </ApolloProvider>
         {/* </RainbowKitProvider> */}
       </QueryClientProvider>
     </WagmiProvider>

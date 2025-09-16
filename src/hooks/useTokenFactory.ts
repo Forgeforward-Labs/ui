@@ -15,13 +15,23 @@ export const useTokenFactory = () => {
     tokenSupply: number
   ) => {
     try {
+      if (!tokenSupply || !tokenDecimals || !tokenSymbol || !tokenName) {
+        toast.error("Please fill in all fields");
+        return null;
+      }
+
       const { request, result: tokenAddress } =
         await readClient.simulateContract({
           account: client?.account,
           address: tokenFactoryAddress,
           abi: TokenFactoryAbi,
           functionName: "createStandardToken",
-          args: [tokenName, tokenSymbol, BigInt(tokenSupply), tokenDecimals],
+          args: [
+            tokenName,
+            tokenSymbol,
+            BigInt(tokenSupply * 10 ** tokenDecimals),
+            tokenDecimals,
+          ],
         });
 
       const txHash = await client?.writeContract(request);

@@ -1,5 +1,6 @@
 import Navbar from "@/components/Navbar";
 import TokenFactoryCard from "@/components/TokenFactoryCard";
+// import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -7,24 +8,34 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Coins, History, TrendingUp } from "lucide-react";
+import {
+  useGetPlatformStatsQuery,
+  useGetRecentTokensQuery,
+  useGetUserTokensQuery,
+} from "@/graphql/__generated__/types-and-hooks";
+import { History, TrendingUp } from "lucide-react";
+import { useAccount } from "wagmi";
+
+import { UserTokenCard } from "@/components/UserTokenCard";
 
 const TokenFactory = () => {
-  const recentTokens = [
-    {
-      name: "DeFi Token",
-      symbol: "DFT",
-      supply: "1,000,000",
-      network: "Ethereum",
+  const { data: recentTokens } = useGetRecentTokensQuery({
+    pollInterval: 10000,
+  });
+  const { address } = useAccount();
+  const { data: platformStats } = useGetPlatformStatsQuery({
+    pollInterval: 10000,
+  });
+
+  const { data: userTokens } = useGetUserTokensQuery({
+    variables: {
+      owner: address as string,
     },
-    { name: "GameFi Coin", symbol: "GFC", supply: "500,000", network: "BSC" },
-    {
-      name: "Utility Token",
-      symbol: "UTL",
-      supply: "2,000,000",
-      network: "Polygon",
-    },
-  ];
+    skip: !address,
+    pollInterval: 10000,
+  });
+
+  const userCreatedTokens = userTokens?.Tokens || [];
 
   return (
     <div className="min-h-screen bg-background">
@@ -64,7 +75,9 @@ const TokenFactory = () => {
                     <span className="text-muted-foreground">
                       Tokens Created
                     </span>
-                    <span className="font-semibold text-accent">12,847</span>
+                    <span className="font-semibold text-accent">
+                      {platformStats?.PlatformStats[0]?.totalTokens || 0}
+                    </span>
                   </div>
                 </CardContent>
               </Card>
@@ -81,7 +94,7 @@ const TokenFactory = () => {
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-3">
-                  {recentTokens.map((token, index) => (
+                  {recentTokens?.Tokens?.map((token, index: number) => (
                     <div
                       key={index}
                       className="flex items-center justify-between p-3 rounded-lg bg-muted/50 hover:bg-muted/70 transition-colors"
@@ -98,7 +111,10 @@ const TokenFactory = () => {
                         </div>
                       </div>
                       <div className="text-right">
-                        <p className="text-sm font-medium">{token.supply}</p>
+                        <p className="text-sm font-medium">
+                          {Number(token.totalSupply) /
+                            10 ** Number(token.decimalPlaces)}
+                        </p>
                       </div>
                     </div>
                   ))}
@@ -106,6 +122,24 @@ const TokenFactory = () => {
               </Card>
             </div>
           </div>
+
+          {/* User Created Tokens Grid Section */}
+          {userCreatedTokens.length > 0 && (
+            <div className="mt-16">
+              <div className="text-center mb-8">
+                <h2 className="text-2xl font-bold mb-2">Your Created Tokens</h2>
+                <p className="text-muted-foreground">
+                  Manage and monitor all your created tokens
+                </p>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {userCreatedTokens.map((token, index) => (
+                  <UserTokenCard key={index} token={token} />
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       </main>
     </div>
