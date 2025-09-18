@@ -27,6 +27,22 @@ type PlatformStats {
   totalSales: BigInt!
 }
 
+type Lock {
+  id: ID!
+  token: String!
+  owner: String!
+  lockingAmount: BigInt!
+  lockTimeEnd: BigInt!
+  projectImageUrl: String!
+  createdAt: BigInt!
+  lockAddress: String!
+}
+
+input LockWhereInput {
+  owner: StringWhereInput
+  lockAddress: StringWhereInput
+}
+
 type Query {
   PlatformStats: PlatformStats
   Tokens(
@@ -34,6 +50,7 @@ type Query {
     order_by: TokensOrderByInput
     limit: Int
   ): [Tokens!]!
+  Lock(where: LockWhereInput): Lock!
 }
 
 input TokensWhereInput {

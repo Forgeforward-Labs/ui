@@ -48,7 +48,7 @@ export const UserTokenCard = ({ token }: { token: Tokens }) => {
             <div>
               <p className="text-muted-foreground">Created</p>
               <p className="font-semibold">
-                {convertTimestampToDate(token.createdAt)}
+                {convertTimestampToDate(Number(token.createdAt))}
               </p>
             </div>
             <div>

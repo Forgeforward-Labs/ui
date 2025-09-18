@@ -76,7 +76,8 @@ const TokenFactory = () => {
                       Tokens Created
                     </span>
                     <span className="font-semibold text-accent">
-                      {platformStats?.PlatformStats[0]?.totalTokens || 0}
+                      {(platformStats?.PlatformStats as any)?.[0]
+                        ?.totalTokens || 0}
                     </span>
                   </div>
                 </CardContent>

@@ -38,3 +38,29 @@ query GetUserTokens($owner: String!) {
     transferTax
   }
 }
+
+query GetUserLocks($owner: String!) {
+  Lock(where: { owner: { _eq: $owner } }) {
+    id
+    token
+    owner
+    lockingAmount
+    lockTimeEnd
+    projectImageUrl
+    createdAt
+    lockAddress
+  }
+}
+
+query GetLock($lockAddress: String!) {
+  Lock(where: { lockAddress: { _eq: $lockAddress } }) {
+    id
+    token
+    owner
+    lockingAmount
+    lockTimeEnd
+    projectImageUrl
+    createdAt
+    lockAddress
+  }
+}

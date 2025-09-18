@@ -18,6 +18,23 @@ export type Scalars = {
   BigInt: { input: string; output: string; }
 };
 
+export type Lock = {
+  __typename?: 'Lock';
+  createdAt: Scalars['BigInt']['output'];
+  id: Scalars['ID']['output'];
+  lockAddress: Scalars['String']['output'];
+  lockTimeEnd: Scalars['BigInt']['output'];
+  lockingAmount: Scalars['BigInt']['output'];
+  owner: Scalars['String']['output'];
+  projectImageUrl: Scalars['String']['output'];
+  token: Scalars['String']['output'];
+};
+
+export type LockWhereInput = {
+  lockAddress?: InputMaybe<StringWhereInput>;
+  owner?: InputMaybe<StringWhereInput>;
+};
+
 export enum OrderDirection {
   Asc = 'asc',
   Desc = 'desc'
@@ -34,8 +51,14 @@ export type PlatformStats = {
 
 export type Query = {
   __typename?: 'Query';
+  Lock: Lock;
   PlatformStats?: Maybe<PlatformStats>;
   Tokens: Array<Tokens>;
+};
+
+
+export type QueryLockArgs = {
+  where?: InputMaybe<LockWhereInput>;
 };
 
 
@@ -93,6 +116,20 @@ export type GetUserTokensQueryVariables = Exact<{
 
 
 export type GetUserTokensQuery = { __typename?: 'Query', Tokens: Array<{ __typename?: 'Tokens', id: string, token: string, name: string, symbol: string, totalSupply: string, decimalPlaces: string, owner: string, tokenType: TokenType, createdAt: string, fee?: string, transferTax?: string }> };
+
+export type GetUserLocksQueryVariables = Exact<{
+  owner: Scalars['String']['input'];
+}>;
+
+
+export type GetUserLocksQuery = { __typename?: 'Query', Lock: { __typename?: 'Lock', id: string, token: string, owner: string, lockingAmount: string, lockTimeEnd: string, projectImageUrl: string, createdAt: string, lockAddress: string } };
+
+export type GetLockQueryVariables = Exact<{
+  lockAddress: Scalars['String']['input'];
+}>;
+
+
+export type GetLockQuery = { __typename?: 'Query', Lock: { __typename?: 'Lock', id: string, token: string, owner: string, lockingAmount: string, lockTimeEnd: string, projectImageUrl: string, createdAt: string, lockAddress: string } };
 
 
 export const GetPlatformStatsDocument = gql`
@@ -236,3 +273,97 @@ export type GetUserTokensQueryHookResult = ReturnType<typeof useGetUserTokensQue
 export type GetUserTokensLazyQueryHookResult = ReturnType<typeof useGetUserTokensLazyQuery>;
 export type GetUserTokensSuspenseQueryHookResult = ReturnType<typeof useGetUserTokensSuspenseQuery>;
 export type GetUserTokensQueryResult = Apollo.QueryResult<GetUserTokensQuery, GetUserTokensQueryVariables>;
+export const GetUserLocksDocument = gql`
+    query GetUserLocks($owner: String!) {
+  Lock(where: {owner: {_eq: $owner}}) {
+    id
+    token
+    owner
+    lockingAmount
+    lockTimeEnd
+    projectImageUrl
+    createdAt
+    lockAddress
+  }
+}
+    `;
+
+/**
+ * __useGetUserLocksQuery__
+ *
+ * To run a query within a React component, call `useGetUserLocksQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetUserLocksQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetUserLocksQuery({
+ *   variables: {
+ *      owner: // value for 'owner'
+ *   },
+ * });
+ */
+export function useGetUserLocksQuery(baseOptions: Apollo.QueryHookOptions<GetUserLocksQuery, GetUserLocksQueryVariables> & ({ variables: GetUserLocksQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetUserLocksQuery, GetUserLocksQueryVariables>(GetUserLocksDocument, options);
+      }
+export function useGetUserLocksLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetUserLocksQuery, GetUserLocksQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetUserLocksQuery, GetUserLocksQueryVariables>(GetUserLocksDocument, options);
+        }
+export function useGetUserLocksSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetUserLocksQuery, GetUserLocksQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetUserLocksQuery, GetUserLocksQueryVariables>(GetUserLocksDocument, options);
+        }
+export type GetUserLocksQueryHookResult = ReturnType<typeof useGetUserLocksQuery>;
+export type GetUserLocksLazyQueryHookResult = ReturnType<typeof useGetUserLocksLazyQuery>;
+export type GetUserLocksSuspenseQueryHookResult = ReturnType<typeof useGetUserLocksSuspenseQuery>;
+export type GetUserLocksQueryResult = Apollo.QueryResult<GetUserLocksQuery, GetUserLocksQueryVariables>;
+export const GetLockDocument = gql`
+    query GetLock($lockAddress: String!) {
+  Lock(where: {lockAddress: {_eq: $lockAddress}}) {
+    id
+    token
+    owner
+    lockingAmount
+    lockTimeEnd
+    projectImageUrl
+    createdAt
+    lockAddress
+  }
+}
+    `;
+
+/**
+ * __useGetLockQuery__
+ *
+ * To run a query within a React component, call `useGetLockQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetLockQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetLockQuery({
+ *   variables: {
+ *      lockAddress: // value for 'lockAddress'
+ *   },
+ * });
+ */
+export function useGetLockQuery(baseOptions: Apollo.QueryHookOptions<GetLockQuery, GetLockQueryVariables> & ({ variables: GetLockQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetLockQuery, GetLockQueryVariables>(GetLockDocument, options);
+      }
+export function useGetLockLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetLockQuery, GetLockQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetLockQuery, GetLockQueryVariables>(GetLockDocument, options);
+        }
+export function useGetLockSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetLockQuery, GetLockQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetLockQuery, GetLockQueryVariables>(GetLockDocument, options);
+        }
+export type GetLockQueryHookResult = ReturnType<typeof useGetLockQuery>;
+export type GetLockLazyQueryHookResult = ReturnType<typeof useGetLockLazyQuery>;
+export type GetLockSuspenseQueryHookResult = ReturnType<typeof useGetLockSuspenseQuery>;
+export type GetLockQueryResult = Apollo.QueryResult<GetLockQuery, GetLockQueryVariables>;

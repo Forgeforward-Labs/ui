@@ -175,7 +175,7 @@ const TokenManagementModal: React.FC<TokenManagementModalProps> = ({
               <div>
                 <Label className="text-sm text-muted-foreground">Created</Label>
                 <p className="font-semibold mt-1">
-                  {convertTimestampToDate(token.createdAt)}
+                  {convertTimestampToDate(Number(token.createdAt))}
                 </p>
               </div>
               <div>
