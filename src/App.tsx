@@ -2,6 +2,8 @@ import Navbar from "./components/Navbar";
 import { Route, Routes } from "react-router-dom";
 import Home from "./pages/Home";
 import TokenFactory from "./pages/TokenFactory";
+import Lock from "./pages/Lock";
+import Airdrop from "./pages/Airdrop";
 
 function App() {
   return (
@@ -10,6 +12,8 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/token-factory" element={<TokenFactory />} />
+        <Route path="/lock" element={<Lock />} />
+        <Route path="/airdrop" element={<Airdrop />} />
       </Routes>
     </div>
   );
