@@ -169,6 +169,23 @@ export const useERC20Token = (address: string) => {
     }
   };
 
+  const getTokenApproval = async (spender: `0x${string}`) => {
+    try {
+      const approval = await readClient.readContract({
+        address: address as `0x${string}`,
+        abi: standardTokenAbi,
+        functionName: "allowance",
+        args: [account, spender],
+      });
+
+      return approval as bigint;
+    } catch (error) {
+      console.error(error);
+      toast.error("Failed to get token approval");
+      return 0n;
+    }
+  };
+
   return {
     getTokenOwnership,
     transferOwnership,
@@ -177,5 +194,6 @@ export const useERC20Token = (address: string) => {
     getTokenBalance,
     getTokenAllowance,
     approve,
+    getTokenApproval,
   };
 };

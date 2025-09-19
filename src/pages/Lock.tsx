@@ -18,11 +18,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Calendar } from "@/components/ui/calendar";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
 import { Slider } from "@/components/ui/slider";
 import {
   Lock as LockIcon,
@@ -32,10 +27,9 @@ import {
   Search,
   Coins,
   Zap,
-  Calendar as CalendarIcon,
 } from "lucide-react";
 import { format } from "date-fns";
-import { cn, convertTimestampToDate } from "@/lib/utils";
+import { convertTimestampToDate } from "@/lib/utils";
 import Navbar from "@/components/Navbar";
 import { useAccount, useBalance } from "wagmi";
 import useLockFactory from "@/hooks/useLockFactory";

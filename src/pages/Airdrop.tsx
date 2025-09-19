@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -20,17 +20,39 @@ import {
 import { Upload, Gift, Users, Download, Send, Coins } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import { toast } from "sonner";
+import { useAirdrop } from "@/hooks/useAirdrop";
+import { useERC20Token } from "@/hooks/useERC20Token";
+import { useQuery } from "@tanstack/react-query";
 
 const Airdrop = () => {
   const [tokenType, setTokenType] = useState("contract"); // "native" or "contract"
   const [tokenAddress, setTokenAddress] = useState("");
   const [allocationType, setAllocationType] = useState("allocation"); // "allocation" or "equal"
-  const [totalAmount, setTotalAmount] = useState("");
+  //   const [totalAmount, setTotalAmount] = useState("");
   const [amountPerRecipient, setAmountPerRecipient] = useState("");
   const [csvFile, setCsvFile] = useState<File | null>(null);
   const [csvData, setCsvData] = useState<any[]>([]);
 
-  console.log(csvData);
+  const { getTokenDetails } = useERC20Token(tokenAddress);
+
+  const { data: tokenDetails } = useQuery({
+    queryKey: ["tokenDetails", tokenAddress],
+    queryFn: () => getTokenDetails(),
+  });
+
+  const {
+    distributeEtherAllocation,
+    distributeTokenAllocation,
+    distributeEther,
+    distributeToken,
+  } = useAirdrop();
+
+  const totalAmount = useMemo(() => {
+    if (allocationType === "allocation") {
+      return csvData.reduce((acc, curr) => acc + Number(curr.amount), 0);
+    }
+    return Number(amountPerRecipient) * csvData.length;
+  }, [allocationType, csvData, amountPerRecipient]);
 
   const parseCSV = (content: string) => {
     const lines = content.trim().split("\n");
@@ -102,7 +124,7 @@ const Airdrop = () => {
     toast.success(`${filename} has been downloaded`);
   };
 
-  const handleCreateAirdrop = () => {
+  const handleCreateAirdrop = async () => {
     if (!csvFile) {
       toast.error("Please upload a CSV file");
       return;
@@ -119,6 +141,50 @@ const Airdrop = () => {
     } else if (allocationType === "equal" && !amountPerRecipient) {
       toast.error("Please enter amount per recipient");
       return;
+    }
+
+    if (tokenType === "native" && allocationType === "allocation") {
+      const tx = await distributeEtherAllocation(
+        csvData.map((data) => data.address),
+        csvData.map((data) => BigInt(Number(data.amount) * 10 ** 18))
+      );
+      toast.success("Ether distributed successfully");
+      return tx;
+    }
+
+    if (tokenType === "contract" && allocationType === "allocation") {
+      const tx = await distributeTokenAllocation(
+        tokenAddress,
+        csvData.map((data) => data.address),
+        csvData.map((data) =>
+          BigInt(
+            Number(data.amount) * 10 ** Number(tokenDetails?.decimals ?? 0)
+          )
+        )
+      );
+      toast.success("Token distributed successfully");
+      return tx;
+    }
+
+    if (tokenType === "native" && allocationType === "equal") {
+      const tx = await distributeEther(
+        csvData.map((data) => data.address),
+        BigInt(Number(amountPerRecipient) * 10 ** 18)
+      );
+      toast.success("Ether distributed successfully");
+      return tx;
+    }
+
+    if (tokenType === "contract" && allocationType === "equal") {
+      const tx = await distributeToken(
+        tokenAddress,
+        csvData.map((data) => data.address),
+        BigInt(
+          Number(amountPerRecipient) * 10 ** Number(tokenDetails?.decimals ?? 0)
+        )
+      );
+      toast.success("Token distributed successfully");
+      return tx;
     }
 
     toast.success(
