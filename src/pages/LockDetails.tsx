@@ -78,11 +78,15 @@ const LockDetails = () => {
   });
 
   const tokenName =
-    lockData?.token === zeroAddress ? "STT" : (tokenDetails?.name as string);
+    lockData?.token === zeroAddress
+      ? "STT"
+      : ((tokenDetails as any)?.name as string);
   const tokenSymbol =
-    lockData?.token === zeroAddress ? "STT" : (tokenDetails?.symbol as string);
+    lockData?.token === zeroAddress
+      ? "STT"
+      : ((tokenDetails as any)?.symbol as string);
   const decimalPlaces =
-    lockData?.token === zeroAddress ? 18 : tokenDetails?.decimals || 0;
+    lockData?.token === zeroAddress ? 18 : (tokenDetails as any)?.decimals || 0;
   const status =
     Number(lockData?.lockTimeEnd) * 1000 > Date.now()
       ? "Locked"
