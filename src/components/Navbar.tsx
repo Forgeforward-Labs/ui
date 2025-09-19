@@ -11,7 +11,6 @@ const Navbar = () => {
   const location = useLocation();
 
   const navigation = [
-    { name: "Home", href: "/" },
     { name: "Token Factory", href: "/token-factory" },
     { name: "Launchpad", href: "/launchpad" },
     { name: "Lock", href: "/lock" },

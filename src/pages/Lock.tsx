@@ -37,7 +37,10 @@ import { zeroAddress } from "viem";
 import { toast } from "sonner";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useERC20Token } from "@/hooks/useERC20Token";
-import { useGetUserLocksQuery } from "@/graphql/__generated__/types-and-hooks";
+import {
+  useGetPlatformStatsQuery,
+  useGetUserLocksQuery,
+} from "@/graphql/__generated__/types-and-hooks";
 import { UserLockCard } from "@/components/UserLockCard";
 // import { useBalance } from "wagmi";
 
@@ -84,6 +87,8 @@ const Lock = () => {
     queryKey: ["tokenDetails", tokenAddress],
     queryFn: () => getTokenDetails(),
   });
+
+  const { data: platformStats } = useGetPlatformStatsQuery();
 
   console.log("tokenDetails", tokenDetails);
 
@@ -607,19 +612,12 @@ const Lock = () => {
                       <span className="text-sm text-muted-foreground">
                         Total Locks
                       </span>
-                      <span className="font-semibold">1,247</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-sm text-muted-foreground">
-                        Total Value Locked
+                      <span className="font-semibold">
+                        {
+                          (platformStats?.PlatformStats as any)?.[0]
+                            ?.totalTokenLockers
+                        }
                       </span>
-                      <span className="font-semibold">$52.4M</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-sm text-muted-foreground">
-                        Active Locks
-                      </span>
-                      <span className="font-semibold">892</span>
                     </div>
                   </CardContent>
                 </Card>

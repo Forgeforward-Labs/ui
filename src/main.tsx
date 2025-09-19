@@ -15,7 +15,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 const queryClient = new QueryClient();
 
 const client = new ApolloClient({
-  uri: "http://localhost:8080/v1/graphql",
+  uri: import.meta.env.VITE_GRAPHQL_URL || "http://localhost:8080/v1/graphql",
   cache: new InMemoryCache(),
 });
 
