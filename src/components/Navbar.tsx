@@ -12,7 +12,7 @@ const Navbar = () => {
 
   const navigation = [
     { name: "Token Factory", href: "/token-factory" },
-    { name: "Launchpad", href: "/launchpad" },
+    // { name: "Launchpad", href: "/launchpad" },
     { name: "Lock", href: "/lock" },
     { name: "Airdrop", href: "/airdrop" },
   ];

@@ -5,7 +5,7 @@ import heroBackground from "@/assets/hero-background.jpg";
 
 const HeroSection = () => {
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden mt-20 md:mt-10">
       {/* Background Image with Overlay */}
       <div className="absolute inset-0 z-0">
         <img
