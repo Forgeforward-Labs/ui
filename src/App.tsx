@@ -4,6 +4,7 @@ import Home from "./pages/Home";
 import TokenFactory from "./pages/TokenFactory";
 import Lock from "./pages/Lock";
 import Airdrop from "./pages/Airdrop";
+import LockDetails from "./pages/LockDetails";
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
         <Route path="/token-factory" element={<TokenFactory />} />
         <Route path="/lock" element={<Lock />} />
         <Route path="/airdrop" element={<Airdrop />} />
+        <Route path="/lock/:address" element={<LockDetails />} />
       </Routes>
     </div>
   );
