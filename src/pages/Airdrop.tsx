@@ -188,7 +188,7 @@ const Airdrop = () => {
     }
 
     toast.success(
-      `Token dispenser created successfully with ${csvData.length} recipients`
+      `Token distributed successfully with ${csvData.length} recipients`
     );
   };
 
@@ -203,7 +203,7 @@ const Airdrop = () => {
               <Gift className="h-8 w-8 text-primary-foreground" />
             </div>
             <h1 className="text-4xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-              Token Dispenser
+              Airdrop Dispenser
             </h1>
           </div>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
@@ -220,7 +220,7 @@ const Airdrop = () => {
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
                     <Send className="h-5 w-5 text-primary" />
-                    Create Token Dispenser
+                    Token Dispenser
                   </CardTitle>
                   <CardDescription>
                     Set up automated token distribution to multiple recipients

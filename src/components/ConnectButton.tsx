@@ -22,7 +22,7 @@ const WalletModal = ({
 
         
       </DialogTrigger> */}
-      <DialogContent>
+      <DialogContent className="max-w-md">
         <div className="text-2xl font-bold">Connect Wallet</div>
         {connectors.map((connector) => (
           <div
