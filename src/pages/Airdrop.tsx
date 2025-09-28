@@ -220,7 +220,7 @@ const Airdrop = () => {
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
                     <Send className="h-5 w-5 text-primary" />
-                    Token Dispenser
+                    Airdrop Dispenser
                   </CardTitle>
                   <CardDescription>
                     Set up automated token distribution to multiple recipients
@@ -374,7 +374,7 @@ const Airdrop = () => {
                     onClick={handleCreateAirdrop}
                   >
                     <Gift className="mr-2 h-4 w-4" />
-                    Create Token Dispenser
+                    Dispense Tokens
                   </Button>
                 </CardContent>
               </Card>
