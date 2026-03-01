@@ -6,6 +6,10 @@ import Lock from "./pages/Lock";
 import Airdrop from "./pages/Airdrop";
 import LockDetails from "./pages/LockDetails";
 import Launchpad from "./pages/Launchpad";
+import Sales from "./pages/Sales";
+import PresaleDetail from "./pages/PresaleDetail";
+import Portfolio from "./pages/Portfolio";
+import Admin from "./pages/Admin";
 
 function App() {
   return (
@@ -18,6 +22,10 @@ function App() {
         <Route path="/airdrop" element={<Airdrop />} />
         <Route path="/lock/:address" element={<LockDetails />} />
         <Route path="/launchpad" element={<Launchpad />} />
+        <Route path="/sales" element={<Sales />} />
+        <Route path="/sales/:id" element={<PresaleDetail />} />
+        <Route path="/portfolio" element={<Portfolio />} />
+        <Route path="/admin" element={<Admin />} />
       </Routes>
     </div>
   );

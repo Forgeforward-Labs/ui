@@ -1,34 +1,14 @@
 import { useMemo, useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Upload, Gift, Users, Download, Send, Coins } from "lucide-react";
-import Navbar from "@/components/Navbar";
+import { Upload, Gift, Users, Download, Send } from "lucide-react";
 import { toast } from "sonner";
 import { useAirdrop } from "@/hooks/useAirdrop";
 import { useERC20Token } from "@/hooks/useERC20Token";
 import { useQuery } from "@tanstack/react-query";
 
 const Airdrop = () => {
-  const [tokenType, setTokenType] = useState("contract"); // "native" or "contract"
+  const [tokenType, setTokenType] = useState("contract");
   const [tokenAddress, setTokenAddress] = useState("");
-  const [allocationType, setAllocationType] = useState("allocation"); // "allocation" or "equal"
-  //   const [totalAmount, setTotalAmount] = useState("");
+  const [allocationType, setAllocationType] = useState("allocation");
   const [amountPerRecipient, setAmountPerRecipient] = useState("");
   const [csvFile, setCsvFile] = useState<File | null>(null);
   const [csvData, setCsvData] = useState<any[]>([]);
@@ -78,7 +58,6 @@ const Airdrop = () => {
     if (file && file.type === "text/csv") {
       setCsvFile(file);
 
-      // Read and parse CSV file
       const reader = new FileReader();
       reader.onload = (e) => {
         const content = e.target?.result as string;
@@ -193,236 +172,231 @@ const Airdrop = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
-      <Navbar />
-
-      <main className="container mx-auto px-4 pt-24 pb-12">
+    <div className="min-h-screen bg-zinc-950">
+      <main className="max-w-7xl mx-auto px-4 pt-24 pb-12">
+        {/* Header */}
         <div className="text-center mb-12">
           <div className="flex items-center justify-center gap-3 mb-4">
-            <div className="p-3 gradient-primary rounded-xl">
-              <Gift className="h-8 w-8 text-primary-foreground" />
+            <div className="p-3 bg-gradient-to-r from-emerald-400 to-emerald-500 rounded-xl">
+              <Gift className="h-8 w-8 text-black" />
             </div>
-            <h1 className="text-4xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+            <h1 className="text-4xl font-bold bg-gradient-to-r from-emerald-400 to-emerald-500 bg-clip-text text-transparent">
               Airdrop Dispenser
             </h1>
           </div>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+          <p className="text-xl text-zinc-400 max-w-2xl mx-auto">
             Distribute tokens efficiently to your community with our automated
             airdrop system.
           </p>
         </div>
 
-        <div className="space-y-8">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            {/* Token Dispenser Form */}
-            <div className="lg:col-span-2">
-              <Card className="glass-card border-white/20">
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Send className="h-5 w-5 text-primary" />
-                    Airdrop Dispenser
-                  </CardTitle>
-                  <CardDescription>
-                    Set up automated token distribution to multiple recipients
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* Token Dispenser Form */}
+          <div className="lg:col-span-2">
+            <div className="bg-gradient-to-br from-zinc-900/90 to-zinc-900/50 rounded-2xl border border-zinc-700/40 p-6">
+              <div className="flex items-center gap-2 mb-2">
+                <Send className="h-5 w-5 text-emerald-400" />
+                <h2 className="text-xl font-semibold text-white">
+                  Airdrop Dispenser
+                </h2>
+              </div>
+              <p className="text-zinc-500 text-sm mb-6">
+                Set up automated token distribution to multiple recipients
+              </p>
+
+              <div className="space-y-6">
+                {/* Token Type */}
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-zinc-300">
+                    Token Type
+                  </label>
+                  <select
+                    value={tokenType}
+                    onChange={(e) => setTokenType(e.target.value)}
+                    className="w-full bg-zinc-800/50 border border-zinc-700/50 rounded-lg px-4 py-3 text-white text-sm focus:outline-none focus:border-emerald-500/50"
+                  >
+                    <option value="native">Native Token</option>
+                    <option value="contract">Contract Token</option>
+                  </select>
+                </div>
+
+                {/* Token Address */}
+                {tokenType === "contract" && (
                   <div className="space-y-2">
-                    <Label>Token Type</Label>
-                    <Select value={tokenType} onValueChange={setTokenType}>
-                      <SelectTrigger>
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="native">
-                          <div className="flex items-center gap-2">
-                            <Coins className="h-4 w-4" />
-                            Native Token
-                          </div>
-                        </SelectItem>
-                        <SelectItem value="contract">
-                          <div className="flex items-center gap-2">
-                            <Gift className="h-4 w-4" />
-                            Contract Token
-                          </div>
-                        </SelectItem>
-                      </SelectContent>
-                    </Select>
+                    <label className="text-sm font-medium text-zinc-300">
+                      Token Contract Address
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="0x..."
+                      value={tokenAddress}
+                      onChange={(e) => setTokenAddress(e.target.value)}
+                      className="w-full bg-zinc-800/50 border border-zinc-700/50 rounded-lg px-4 py-3 text-white text-sm focus:outline-none focus:border-emerald-500/50 placeholder:text-zinc-600"
+                    />
                   </div>
+                )}
 
-                  {tokenType === "contract" && (
-                    <div className="space-y-2">
-                      <Label htmlFor="token-address">
-                        Token Contract Address
-                      </Label>
-                      <Input
-                        id="token-address"
-                        placeholder="0x..."
-                        value={tokenAddress}
-                        onChange={(e) => setTokenAddress(e.target.value)}
-                      />
-                    </div>
-                  )}
+                {/* Allocation Type */}
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-zinc-300">
+                    Allocation Type
+                  </label>
+                  <select
+                    value={allocationType}
+                    onChange={(e) => setAllocationType(e.target.value)}
+                    className="w-full bg-zinc-800/50 border border-zinc-700/50 rounded-lg px-4 py-3 text-white text-sm focus:outline-none focus:border-emerald-500/50"
+                  >
+                    <option value="allocation">
+                      Individual Allocation (CSV with amounts)
+                    </option>
+                    <option value="equal">
+                      Equal Distribution (Same amount for all)
+                    </option>
+                  </select>
+                </div>
 
+                {/* Amount per recipient */}
+                {allocationType === "equal" && (
                   <div className="space-y-2">
-                    <Label>Allocation Type</Label>
-                    <Select
-                      value={allocationType}
-                      onValueChange={setAllocationType}
-                    >
-                      <SelectTrigger>
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="allocation">
-                          Individual Allocation (CSV with amounts)
-                        </SelectItem>
-                        <SelectItem value="equal">
-                          Equal Distribution (Same amount for all)
-                        </SelectItem>
-                      </SelectContent>
-                    </Select>
+                    <label className="text-sm font-medium text-zinc-300">
+                      Amount per Recipient
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="0.00"
+                      value={amountPerRecipient}
+                      onChange={(e) => setAmountPerRecipient(e.target.value)}
+                      className="w-full bg-zinc-800/50 border border-zinc-700/50 rounded-lg px-4 py-3 text-white text-sm focus:outline-none focus:border-emerald-500/50 placeholder:text-zinc-600"
+                    />
+                    <p className="text-xs text-zinc-500">
+                      Each address will receive this exact amount
+                    </p>
                   </div>
+                )}
 
-                  {allocationType === "allocation" ? (
-                    <></>
-                  ) : (
-                    <div className="space-y-2">
-                      <Label htmlFor="amount-per-recipient">
-                        Amount per Recipient
-                      </Label>
-                      <Input
-                        id="amount-per-recipient"
-                        placeholder="0.00"
-                        value={amountPerRecipient}
-                        onChange={(e) => setAmountPerRecipient(e.target.value)}
-                      />
-                      <p className="text-xs text-muted-foreground">
-                        Each address will receive this exact amount
-                      </p>
-                    </div>
-                  )}
-
-                  <div className="space-y-2">
-                    <Label htmlFor="csv-upload">Recipients List (CSV)</Label>
-                    <div className="border border-dashed border-white/20 rounded-lg p-6 text-center hover:border-white/40 transition-colors">
-                      <Upload className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-                      <p className="text-sm text-muted-foreground mb-2">
-                        {allocationType === "allocation"
-                          ? "Upload CSV file with recipient addresses and amounts"
-                          : "Upload CSV file with recipient addresses only"}
-                      </p>
-                      <Input
-                        id="csv-upload"
-                        type="file"
-                        accept=".csv"
-                        onChange={handleFileUpload}
-                        className="hidden"
-                      />
-                      <Label htmlFor="csv-upload" className="cursor-pointer">
-                        <Button variant="outline" asChild>
-                          <span>Choose File</span>
-                        </Button>
-                      </Label>
-                      {csvFile && (
-                        <div className="mt-3 space-y-1">
-                          <p className="text-sm text-primary">
-                            {csvFile.name} selected
-                          </p>
-                          <p className="text-xs text-muted-foreground">
-                            {csvData.length} recipients loaded
-                          </p>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-
-                  <div className="p-4 glass-card rounded-lg border border-white/10">
-                    <h4 className="font-semibold mb-2 text-foreground">
-                      CSV Format & Template
-                    </h4>
-                    {allocationType === "allocation" ? (
-                      <div className="text-sm text-muted-foreground space-y-1 mb-3">
-                        <p>• Column 1: Wallet Address</p>
-                        <p>• Column 2: Token Amount</p>
-                        <p>• Example: 0x123...,100.50</p>
-                      </div>
-                    ) : (
-                      <div className="text-sm text-muted-foreground space-y-1 mb-3">
-                        <p>• Column 1: Wallet Address</p>
-                        <p>• Example: 0x123...</p>
+                {/* CSV Upload */}
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-zinc-300">
+                    Recipients List (CSV)
+                  </label>
+                  <div className="border border-dashed border-zinc-700 rounded-lg p-6 text-center hover:border-zinc-600 transition-colors">
+                    <Upload className="h-12 w-12 text-zinc-500 mx-auto mb-4" />
+                    <p className="text-sm text-zinc-500 mb-2">
+                      {allocationType === "allocation"
+                        ? "Upload CSV file with recipient addresses and amounts"
+                        : "Upload CSV file with recipient addresses only"}
+                    </p>
+                    <input
+                      id="csv-upload"
+                      type="file"
+                      accept=".csv"
+                      onChange={handleFileUpload}
+                      className="hidden"
+                    />
+                    <label htmlFor="csv-upload" className="cursor-pointer">
+                      <span className="inline-block px-4 py-2 bg-zinc-800 border border-zinc-700 rounded-lg text-sm text-white hover:bg-zinc-700 transition-colors">
+                        Choose File
+                      </span>
+                    </label>
+                    {csvFile && (
+                      <div className="mt-3 space-y-1">
+                        <p className="text-sm text-emerald-400">
+                          {csvFile.name} selected
+                        </p>
+                        <p className="text-xs text-zinc-500">
+                          {csvData.length} recipients loaded
+                        </p>
                       </div>
                     )}
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() =>
-                        downloadCSVTemplate(
-                          allocationType as "allocation" | "equal"
-                        )
-                      }
-                    >
-                      <Download className="mr-2 h-4 w-4" />
-                      Download Template
-                    </Button>
                   </div>
+                </div>
 
-                  <Button
-                    className="w-full"
-                    variant="protocol"
-                    size="lg"
-                    onClick={handleCreateAirdrop}
+                {/* CSV Format Info */}
+                <div className="p-4 bg-zinc-800/30 rounded-lg border border-zinc-700/30">
+                  <h4 className="font-semibold mb-2 text-white">
+                    CSV Format & Template
+                  </h4>
+                  {allocationType === "allocation" ? (
+                    <div className="text-sm text-zinc-500 space-y-1 mb-3">
+                      <p>• Column 1: Wallet Address</p>
+                      <p>• Column 2: Token Amount</p>
+                      <p>• Example: 0x123...,100.50</p>
+                    </div>
+                  ) : (
+                    <div className="text-sm text-zinc-500 space-y-1 mb-3">
+                      <p>• Column 1: Wallet Address</p>
+                      <p>• Example: 0x123...</p>
+                    </div>
+                  )}
+                  <button
+                    onClick={() =>
+                      downloadCSVTemplate(
+                        allocationType as "allocation" | "equal"
+                      )
+                    }
+                    className="flex items-center gap-2 px-3 py-1.5 text-sm text-zinc-400 hover:text-white transition-colors"
                   >
-                    <Gift className="mr-2 h-4 w-4" />
-                    Dispense Tokens
-                  </Button>
-                </CardContent>
-              </Card>
-            </div>
+                    <Download className="h-4 w-4" />
+                    Download Template
+                  </button>
+                </div>
 
-            {/* Dispenser Info */}
-            <div className="space-y-6">
-              <Card className="glass-card border-white/20">
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Users className="h-5 w-5 text-primary" />
-                    Dispenser Benefits
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="flex items-start gap-3">
-                    <Gift className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
-                    <div>
-                      <h4 className="font-semibold text-sm">
-                        Batch Distribution
-                      </h4>
-                      <p className="text-xs text-muted-foreground">
-                        Send tokens to multiple addresses at once
-                      </p>
-                    </div>
+                {/* Submit Button */}
+                <button
+                  onClick={handleCreateAirdrop}
+                  className="w-full bg-gradient-to-r from-emerald-400 to-emerald-500 text-black font-bold py-4 rounded-xl flex items-center justify-center gap-2 hover:opacity-90 transition-opacity"
+                >
+                  <Gift className="h-5 w-5" />
+                  Dispense Tokens
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* Dispenser Info */}
+          <div className="space-y-6">
+            <div className="bg-gradient-to-br from-zinc-900/90 to-zinc-900/50 rounded-2xl border border-zinc-700/40 p-6">
+              <div className="flex items-center gap-2 mb-4">
+                <Users className="h-5 w-5 text-emerald-400" />
+                <h3 className="text-lg font-semibold text-white">
+                  Dispenser Benefits
+                </h3>
+              </div>
+              <div className="space-y-4">
+                <div className="flex items-start gap-3">
+                  <Gift className="h-5 w-5 text-emerald-400 mt-0.5 flex-shrink-0" />
+                  <div>
+                    <h4 className="font-semibold text-sm text-white">
+                      Batch Distribution
+                    </h4>
+                    <p className="text-xs text-zinc-500">
+                      Send tokens to multiple addresses at once
+                    </p>
                   </div>
-                  <div className="flex items-start gap-3">
-                    <Users className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
-                    <div>
-                      <h4 className="font-semibold text-sm">
-                        Flexible Amounts
-                      </h4>
-                      <p className="text-xs text-muted-foreground">
-                        Equal or custom amounts per recipient
-                      </p>
-                    </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <Users className="h-5 w-5 text-emerald-400 mt-0.5 flex-shrink-0" />
+                  <div>
+                    <h4 className="font-semibold text-sm text-white">
+                      Flexible Amounts
+                    </h4>
+                    <p className="text-xs text-zinc-500">
+                      Equal or custom amounts per recipient
+                    </p>
                   </div>
-                  <div className="flex items-start gap-3">
-                    <Send className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
-                    <div>
-                      <h4 className="font-semibold text-sm">CSV Upload</h4>
-                      <p className="text-xs text-muted-foreground">
-                        Easy bulk recipient management
-                      </p>
-                    </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <Send className="h-5 w-5 text-emerald-400 mt-0.5 flex-shrink-0" />
+                  <div>
+                    <h4 className="font-semibold text-sm text-white">
+                      CSV Upload
+                    </h4>
+                    <p className="text-xs text-zinc-500">
+                      Easy bulk recipient management
+                    </p>
                   </div>
-                </CardContent>
-              </Card>
+                </div>
+              </div>
             </div>
           </div>
         </div>

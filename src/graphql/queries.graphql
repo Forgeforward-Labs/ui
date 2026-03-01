@@ -64,3 +64,92 @@ query GetLock($lockAddress: String!) {
     lockAddress
   }
 }
+
+query GetAllPresales {
+  Presale(order_by: { createdAt: desc }) {
+    id
+    saleAddress
+    saleOwner
+    token
+    createdAt
+    status
+    startTime
+    endTime
+    softCap
+    hardCap
+    maxBuy
+    totalTokensForSale
+    totalTokensForLiquidity
+    liquidityBPS
+    salesJson
+    totalSold
+    liquidityAmount
+    treasuryAmount
+  }
+}
+
+query GetPresale($saleAddress: String!) {
+  Presale(where: { saleAddress: { _eq: $saleAddress } }) {
+    id
+    saleAddress
+    saleOwner
+    token
+    createdAt
+    status
+    startTime
+    endTime
+    softCap
+    hardCap
+    maxBuy
+    totalTokensForSale
+    totalTokensForLiquidity
+    liquidityBPS
+    salesJson
+    totalSold
+    liquidityAmount
+    treasuryAmount
+  }
+}
+
+query GetPresalesByOwner($owner: String!) {
+  Presale(where: { saleOwner: { _eq: $owner } }, order_by: { createdAt: desc }) {
+    id
+    saleAddress
+    saleOwner
+    token
+    createdAt
+    status
+    startTime
+    endTime
+    softCap
+    hardCap
+    maxBuy
+    totalTokensForSale
+    totalTokensForLiquidity
+    liquidityBPS
+    salesJson
+    totalSold
+    liquidityAmount
+    treasuryAmount
+  }
+}
+
+query GetPresalePurchases($saleAddress: String!) {
+  PresalePurchase(where: { saleAddress: { _eq: $saleAddress } }, order_by: { createdAt: desc }) {
+    id
+    saleAddress
+    buyer
+    ethAmount
+    createdAt
+  }
+}
+
+query GetUserPresalePurchases($buyer: String!) {
+  PresalePurchase(where: { buyer: { _eq: $buyer } }, order_by: { createdAt: desc }) {
+    id
+    saleAddress
+    buyer
+    ethAmount
+    createdAt
+  }
+}

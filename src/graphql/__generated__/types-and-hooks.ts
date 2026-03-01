@@ -49,16 +49,91 @@ export type PlatformStats = {
   totalTokens: Scalars['BigInt']['output'];
 };
 
+export type Presale = {
+  __typename?: 'Presale';
+  createdAt: Scalars['BigInt']['output'];
+  endTime?: Maybe<Scalars['BigInt']['output']>;
+  hardCap?: Maybe<Scalars['BigInt']['output']>;
+  id: Scalars['ID']['output'];
+  liquidityAmount?: Maybe<Scalars['BigInt']['output']>;
+  liquidityBPS?: Maybe<Scalars['BigInt']['output']>;
+  maxBuy?: Maybe<Scalars['BigInt']['output']>;
+  saleAddress: Scalars['String']['output'];
+  saleOwner: Scalars['String']['output'];
+  salesJson?: Maybe<Scalars['String']['output']>;
+  softCap?: Maybe<Scalars['BigInt']['output']>;
+  startTime?: Maybe<Scalars['BigInt']['output']>;
+  status: PresaleStatus;
+  token: Scalars['String']['output'];
+  totalSold?: Maybe<Scalars['BigInt']['output']>;
+  totalTokensForLiquidity?: Maybe<Scalars['BigInt']['output']>;
+  totalTokensForSale?: Maybe<Scalars['BigInt']['output']>;
+  treasuryAmount?: Maybe<Scalars['BigInt']['output']>;
+};
+
+export type PresaleOrderByInput = {
+  createdAt?: InputMaybe<OrderDirection>;
+};
+
+export type PresalePurchase = {
+  __typename?: 'PresalePurchase';
+  buyer: Scalars['String']['output'];
+  createdAt: Scalars['BigInt']['output'];
+  ethAmount: Scalars['BigInt']['output'];
+  id: Scalars['ID']['output'];
+  saleAddress: Scalars['String']['output'];
+};
+
+export type PresalePurchaseOrderByInput = {
+  createdAt?: InputMaybe<OrderDirection>;
+};
+
+export type PresalePurchaseWhereInput = {
+  buyer?: InputMaybe<StringWhereInput>;
+  saleAddress?: InputMaybe<StringWhereInput>;
+};
+
+export enum PresaleStatus {
+  Active = 'ACTIVE',
+  Finalized = 'FINALIZED'
+}
+
+export type PresaleStatusWhereInput = {
+  _eq?: InputMaybe<PresaleStatus>;
+};
+
+export type PresaleWhereInput = {
+  saleAddress?: InputMaybe<StringWhereInput>;
+  saleOwner?: InputMaybe<StringWhereInput>;
+  status?: InputMaybe<PresaleStatusWhereInput>;
+};
+
 export type Query = {
   __typename?: 'Query';
-  Lock: Lock;
+  Lock: Array<Lock>;
   PlatformStats?: Maybe<PlatformStats>;
+  Presale: Array<Presale>;
+  PresalePurchase: Array<PresalePurchase>;
   Tokens: Array<Tokens>;
 };
 
 
 export type QueryLockArgs = {
   where?: InputMaybe<LockWhereInput>;
+};
+
+
+export type QueryPresaleArgs = {
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<PresaleOrderByInput>;
+  where?: InputMaybe<PresaleWhereInput>;
+};
+
+
+export type QueryPresalePurchaseArgs = {
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<PresalePurchaseOrderByInput>;
+  where?: InputMaybe<PresalePurchaseWhereInput>;
 };
 
 
@@ -122,14 +197,47 @@ export type GetUserLocksQueryVariables = Exact<{
 }>;
 
 
-export type GetUserLocksQuery = { __typename?: 'Query', Lock: { __typename?: 'Lock', id: string, token: string, owner: string, lockingAmount: string, lockTimeEnd: string, projectImageUrl: string, createdAt: string, lockAddress: string } };
+export type GetUserLocksQuery = { __typename?: 'Query', Lock: Array<{ __typename?: 'Lock', id: string, token: string, owner: string, lockingAmount: string, lockTimeEnd: string, projectImageUrl: string, createdAt: string, lockAddress: string }> };
 
 export type GetLockQueryVariables = Exact<{
   lockAddress: Scalars['String']['input'];
 }>;
 
 
-export type GetLockQuery = { __typename?: 'Query', Lock: { __typename?: 'Lock', id: string, token: string, owner: string, lockingAmount: string, lockTimeEnd: string, projectImageUrl: string, createdAt: string, lockAddress: string } };
+export type GetLockQuery = { __typename?: 'Query', Lock: Array<{ __typename?: 'Lock', id: string, token: string, owner: string, lockingAmount: string, lockTimeEnd: string, projectImageUrl: string, createdAt: string, lockAddress: string }> };
+
+export type GetAllPresalesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetAllPresalesQuery = { __typename?: 'Query', Presale: Array<{ __typename?: 'Presale', id: string, saleAddress: string, saleOwner: string, token: string, createdAt: string, status: PresaleStatus, startTime?: string, endTime?: string, softCap?: string, hardCap?: string, maxBuy?: string, totalTokensForSale?: string, totalTokensForLiquidity?: string, liquidityBPS?: string, salesJson?: string, totalSold?: string, liquidityAmount?: string, treasuryAmount?: string }> };
+
+export type GetPresaleQueryVariables = Exact<{
+  saleAddress: Scalars['String']['input'];
+}>;
+
+
+export type GetPresaleQuery = { __typename?: 'Query', Presale: Array<{ __typename?: 'Presale', id: string, saleAddress: string, saleOwner: string, token: string, createdAt: string, status: PresaleStatus, startTime?: string, endTime?: string, softCap?: string, hardCap?: string, maxBuy?: string, totalTokensForSale?: string, totalTokensForLiquidity?: string, liquidityBPS?: string, salesJson?: string, totalSold?: string, liquidityAmount?: string, treasuryAmount?: string }> };
+
+export type GetPresalesByOwnerQueryVariables = Exact<{
+  owner: Scalars['String']['input'];
+}>;
+
+
+export type GetPresalesByOwnerQuery = { __typename?: 'Query', Presale: Array<{ __typename?: 'Presale', id: string, saleAddress: string, saleOwner: string, token: string, createdAt: string, status: PresaleStatus, startTime?: string, endTime?: string, softCap?: string, hardCap?: string, maxBuy?: string, totalTokensForSale?: string, totalTokensForLiquidity?: string, liquidityBPS?: string, salesJson?: string, totalSold?: string, liquidityAmount?: string, treasuryAmount?: string }> };
+
+export type GetPresalePurchasesQueryVariables = Exact<{
+  saleAddress: Scalars['String']['input'];
+}>;
+
+
+export type GetPresalePurchasesQuery = { __typename?: 'Query', PresalePurchase: Array<{ __typename?: 'PresalePurchase', id: string, saleAddress: string, buyer: string, ethAmount: string, createdAt: string }> };
+
+export type GetUserPresalePurchasesQueryVariables = Exact<{
+  buyer: Scalars['String']['input'];
+}>;
+
+
+export type GetUserPresalePurchasesQuery = { __typename?: 'Query', PresalePurchase: Array<{ __typename?: 'PresalePurchase', id: string, saleAddress: string, buyer: string, ethAmount: string, createdAt: string }> };
 
 
 export const GetPlatformStatsDocument = gql`
@@ -367,3 +475,264 @@ export type GetLockQueryHookResult = ReturnType<typeof useGetLockQuery>;
 export type GetLockLazyQueryHookResult = ReturnType<typeof useGetLockLazyQuery>;
 export type GetLockSuspenseQueryHookResult = ReturnType<typeof useGetLockSuspenseQuery>;
 export type GetLockQueryResult = Apollo.QueryResult<GetLockQuery, GetLockQueryVariables>;
+export const GetAllPresalesDocument = gql`
+    query GetAllPresales {
+  Presale(order_by: {createdAt: desc}) {
+    id
+    saleAddress
+    saleOwner
+    token
+    createdAt
+    status
+    startTime
+    endTime
+    softCap
+    hardCap
+    maxBuy
+    totalTokensForSale
+    totalTokensForLiquidity
+    liquidityBPS
+    salesJson
+    totalSold
+    liquidityAmount
+    treasuryAmount
+  }
+}
+    `;
+
+/**
+ * __useGetAllPresalesQuery__
+ *
+ * To run a query within a React component, call `useGetAllPresalesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetAllPresalesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetAllPresalesQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetAllPresalesQuery(baseOptions?: Apollo.QueryHookOptions<GetAllPresalesQuery, GetAllPresalesQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetAllPresalesQuery, GetAllPresalesQueryVariables>(GetAllPresalesDocument, options);
+      }
+export function useGetAllPresalesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetAllPresalesQuery, GetAllPresalesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetAllPresalesQuery, GetAllPresalesQueryVariables>(GetAllPresalesDocument, options);
+        }
+export function useGetAllPresalesSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetAllPresalesQuery, GetAllPresalesQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetAllPresalesQuery, GetAllPresalesQueryVariables>(GetAllPresalesDocument, options);
+        }
+export type GetAllPresalesQueryHookResult = ReturnType<typeof useGetAllPresalesQuery>;
+export type GetAllPresalesLazyQueryHookResult = ReturnType<typeof useGetAllPresalesLazyQuery>;
+export type GetAllPresalesSuspenseQueryHookResult = ReturnType<typeof useGetAllPresalesSuspenseQuery>;
+export type GetAllPresalesQueryResult = Apollo.QueryResult<GetAllPresalesQuery, GetAllPresalesQueryVariables>;
+export const GetPresaleDocument = gql`
+    query GetPresale($saleAddress: String!) {
+  Presale(where: {saleAddress: {_eq: $saleAddress}}) {
+    id
+    saleAddress
+    saleOwner
+    token
+    createdAt
+    status
+    startTime
+    endTime
+    softCap
+    hardCap
+    maxBuy
+    totalTokensForSale
+    totalTokensForLiquidity
+    liquidityBPS
+    salesJson
+    totalSold
+    liquidityAmount
+    treasuryAmount
+  }
+}
+    `;
+
+/**
+ * __useGetPresaleQuery__
+ *
+ * To run a query within a React component, call `useGetPresaleQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetPresaleQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetPresaleQuery({
+ *   variables: {
+ *      saleAddress: // value for 'saleAddress'
+ *   },
+ * });
+ */
+export function useGetPresaleQuery(baseOptions: Apollo.QueryHookOptions<GetPresaleQuery, GetPresaleQueryVariables> & ({ variables: GetPresaleQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetPresaleQuery, GetPresaleQueryVariables>(GetPresaleDocument, options);
+      }
+export function useGetPresaleLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetPresaleQuery, GetPresaleQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetPresaleQuery, GetPresaleQueryVariables>(GetPresaleDocument, options);
+        }
+export function useGetPresaleSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetPresaleQuery, GetPresaleQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetPresaleQuery, GetPresaleQueryVariables>(GetPresaleDocument, options);
+        }
+export type GetPresaleQueryHookResult = ReturnType<typeof useGetPresaleQuery>;
+export type GetPresaleLazyQueryHookResult = ReturnType<typeof useGetPresaleLazyQuery>;
+export type GetPresaleSuspenseQueryHookResult = ReturnType<typeof useGetPresaleSuspenseQuery>;
+export type GetPresaleQueryResult = Apollo.QueryResult<GetPresaleQuery, GetPresaleQueryVariables>;
+export const GetPresalesByOwnerDocument = gql`
+    query GetPresalesByOwner($owner: String!) {
+  Presale(where: {saleOwner: {_eq: $owner}}, order_by: {createdAt: desc}) {
+    id
+    saleAddress
+    saleOwner
+    token
+    createdAt
+    status
+    startTime
+    endTime
+    softCap
+    hardCap
+    maxBuy
+    totalTokensForSale
+    totalTokensForLiquidity
+    liquidityBPS
+    salesJson
+    totalSold
+    liquidityAmount
+    treasuryAmount
+  }
+}
+    `;
+
+/**
+ * __useGetPresalesByOwnerQuery__
+ *
+ * To run a query within a React component, call `useGetPresalesByOwnerQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetPresalesByOwnerQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetPresalesByOwnerQuery({
+ *   variables: {
+ *      owner: // value for 'owner'
+ *   },
+ * });
+ */
+export function useGetPresalesByOwnerQuery(baseOptions: Apollo.QueryHookOptions<GetPresalesByOwnerQuery, GetPresalesByOwnerQueryVariables> & ({ variables: GetPresalesByOwnerQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetPresalesByOwnerQuery, GetPresalesByOwnerQueryVariables>(GetPresalesByOwnerDocument, options);
+      }
+export function useGetPresalesByOwnerLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetPresalesByOwnerQuery, GetPresalesByOwnerQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetPresalesByOwnerQuery, GetPresalesByOwnerQueryVariables>(GetPresalesByOwnerDocument, options);
+        }
+export function useGetPresalesByOwnerSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetPresalesByOwnerQuery, GetPresalesByOwnerQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetPresalesByOwnerQuery, GetPresalesByOwnerQueryVariables>(GetPresalesByOwnerDocument, options);
+        }
+export type GetPresalesByOwnerQueryHookResult = ReturnType<typeof useGetPresalesByOwnerQuery>;
+export type GetPresalesByOwnerLazyQueryHookResult = ReturnType<typeof useGetPresalesByOwnerLazyQuery>;
+export type GetPresalesByOwnerSuspenseQueryHookResult = ReturnType<typeof useGetPresalesByOwnerSuspenseQuery>;
+export type GetPresalesByOwnerQueryResult = Apollo.QueryResult<GetPresalesByOwnerQuery, GetPresalesByOwnerQueryVariables>;
+export const GetPresalePurchasesDocument = gql`
+    query GetPresalePurchases($saleAddress: String!) {
+  PresalePurchase(
+    where: {saleAddress: {_eq: $saleAddress}}
+    order_by: {createdAt: desc}
+  ) {
+    id
+    saleAddress
+    buyer
+    ethAmount
+    createdAt
+  }
+}
+    `;
+
+/**
+ * __useGetPresalePurchasesQuery__
+ *
+ * To run a query within a React component, call `useGetPresalePurchasesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetPresalePurchasesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetPresalePurchasesQuery({
+ *   variables: {
+ *      saleAddress: // value for 'saleAddress'
+ *   },
+ * });
+ */
+export function useGetPresalePurchasesQuery(baseOptions: Apollo.QueryHookOptions<GetPresalePurchasesQuery, GetPresalePurchasesQueryVariables> & ({ variables: GetPresalePurchasesQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetPresalePurchasesQuery, GetPresalePurchasesQueryVariables>(GetPresalePurchasesDocument, options);
+      }
+export function useGetPresalePurchasesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetPresalePurchasesQuery, GetPresalePurchasesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetPresalePurchasesQuery, GetPresalePurchasesQueryVariables>(GetPresalePurchasesDocument, options);
+        }
+export function useGetPresalePurchasesSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetPresalePurchasesQuery, GetPresalePurchasesQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetPresalePurchasesQuery, GetPresalePurchasesQueryVariables>(GetPresalePurchasesDocument, options);
+        }
+export type GetPresalePurchasesQueryHookResult = ReturnType<typeof useGetPresalePurchasesQuery>;
+export type GetPresalePurchasesLazyQueryHookResult = ReturnType<typeof useGetPresalePurchasesLazyQuery>;
+export type GetPresalePurchasesSuspenseQueryHookResult = ReturnType<typeof useGetPresalePurchasesSuspenseQuery>;
+export type GetPresalePurchasesQueryResult = Apollo.QueryResult<GetPresalePurchasesQuery, GetPresalePurchasesQueryVariables>;
+export const GetUserPresalePurchasesDocument = gql`
+    query GetUserPresalePurchases($buyer: String!) {
+  PresalePurchase(where: {buyer: {_eq: $buyer}}, order_by: {createdAt: desc}) {
+    id
+    saleAddress
+    buyer
+    ethAmount
+    createdAt
+  }
+}
+    `;
+
+/**
+ * __useGetUserPresalePurchasesQuery__
+ *
+ * To run a query within a React component, call `useGetUserPresalePurchasesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetUserPresalePurchasesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetUserPresalePurchasesQuery({
+ *   variables: {
+ *      buyer: // value for 'buyer'
+ *   },
+ * });
+ */
+export function useGetUserPresalePurchasesQuery(baseOptions: Apollo.QueryHookOptions<GetUserPresalePurchasesQuery, GetUserPresalePurchasesQueryVariables> & ({ variables: GetUserPresalePurchasesQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetUserPresalePurchasesQuery, GetUserPresalePurchasesQueryVariables>(GetUserPresalePurchasesDocument, options);
+      }
+export function useGetUserPresalePurchasesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetUserPresalePurchasesQuery, GetUserPresalePurchasesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetUserPresalePurchasesQuery, GetUserPresalePurchasesQueryVariables>(GetUserPresalePurchasesDocument, options);
+        }
+export function useGetUserPresalePurchasesSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetUserPresalePurchasesQuery, GetUserPresalePurchasesQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetUserPresalePurchasesQuery, GetUserPresalePurchasesQueryVariables>(GetUserPresalePurchasesDocument, options);
+        }
+export type GetUserPresalePurchasesQueryHookResult = ReturnType<typeof useGetUserPresalePurchasesQuery>;
+export type GetUserPresalePurchasesLazyQueryHookResult = ReturnType<typeof useGetUserPresalePurchasesLazyQuery>;
+export type GetUserPresalePurchasesSuspenseQueryHookResult = ReturnType<typeof useGetUserPresalePurchasesSuspenseQuery>;
+export type GetUserPresalePurchasesQueryResult = Apollo.QueryResult<GetUserPresalePurchasesQuery, GetUserPresalePurchasesQueryVariables>;

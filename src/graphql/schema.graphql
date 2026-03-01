@@ -38,9 +38,58 @@ type Lock {
   lockAddress: String!
 }
 
+enum PresaleStatus {
+  ACTIVE
+  FINALIZED
+}
+
+type Presale {
+  id: ID!
+  saleAddress: String!
+  saleOwner: String!
+  token: String!
+  createdAt: BigInt!
+  status: PresaleStatus!
+  startTime: BigInt
+  endTime: BigInt
+  softCap: BigInt
+  hardCap: BigInt
+  maxBuy: BigInt
+  totalTokensForSale: BigInt
+  totalTokensForLiquidity: BigInt
+  liquidityBPS: BigInt
+  salesJson: String
+  totalSold: BigInt
+  liquidityAmount: BigInt
+  treasuryAmount: BigInt
+}
+
+type PresalePurchase {
+  id: ID!
+  saleAddress: String!
+  buyer: String!
+  ethAmount: BigInt!
+  createdAt: BigInt!
+}
+
 input LockWhereInput {
   owner: StringWhereInput
   lockAddress: StringWhereInput
+}
+
+input PresaleWhereInput {
+  saleAddress: StringWhereInput
+  saleOwner: StringWhereInput
+  status: PresaleStatusWhereInput
+}
+
+input PresalePurchaseWhereInput {
+  saleAddress: StringWhereInput
+  buyer: StringWhereInput
+}
+
+input PresaleStatusWhereInput {
+  _eq: PresaleStatus
 }
 
 type Query {
@@ -50,7 +99,17 @@ type Query {
     order_by: TokensOrderByInput
     limit: Int
   ): [Tokens!]!
-  Lock(where: LockWhereInput): Lock!
+  Lock(where: LockWhereInput): [Lock!]!
+  Presale(
+    where: PresaleWhereInput
+    order_by: PresaleOrderByInput
+    limit: Int
+  ): [Presale!]!
+  PresalePurchase(
+    where: PresalePurchaseWhereInput
+    order_by: PresalePurchaseOrderByInput
+    limit: Int
+  ): [PresalePurchase!]!
 }
 
 input TokensWhereInput {
@@ -62,6 +121,14 @@ input StringWhereInput {
 }
 
 input TokensOrderByInput {
+  createdAt: OrderDirection
+}
+
+input PresaleOrderByInput {
+  createdAt: OrderDirection
+}
+
+input PresalePurchaseOrderByInput {
   createdAt: OrderDirection
 }
 
